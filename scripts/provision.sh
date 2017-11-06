@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -ex
 
@@ -7,14 +7,13 @@ DATA_SOURCE=/var/lib/cloud/seed/nocloud-net
 META_DATA=/tmp/vagrant/cloud-init/nocloud-net/meta-data
 USER_DATA=/tmp/vagrant/cloud-init/nocloud-net/user-data
 
-# confirm this is a centos box
-[[ ! -f /etc/centos-release ]] && exit 1
 
 # check if vagrant_provision has run before
 [[ -f $SUCCESS_INDICATOR ]] && exit 1
 
 # install cloud-init
-yum install -y cloud-init
+apt update
+apt install -y cloud-init
 
 # write cloud-init files
 mkdir -p $DATA_SOURCE
@@ -22,10 +21,11 @@ mkdir -p $DATA_SOURCE
 [[ -f $USER_DATA ]] && cp $USER_DATA $DATA_SOURCE/ || exit 1
 
 # force cloud-init to run
-cloud-init init
-cloud-init modules
+
+cloud-init -f ${DATA_SOURCE}/user-data init
+cloud-init -f ${DATA_SOURCE}/user-data modules
 
 # create vagrant_provision on successful run
-touch $SUCCESS_INDICATOR
+#touch $SUCCESS_INDICATOR
 
 exit 0

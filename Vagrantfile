@@ -25,9 +25,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Add a bridged network
       if boxes['public_network']
         if boxes['public_network']['ip']
-          srv.vm.network 'public_network', bridge: boxes['public_network']['bridge'], ip: boxes['public_network']['ip']
+          srv.vm.network 'private_network', ip: boxes['public_network']['ip']
         else
-          srv.vm.network 'public_network', bridge: boxes['public_network']['bridge']
+          srv.vm.network 'private_network', bridge: boxes['public_network']['bridge']
         end
       end
 
